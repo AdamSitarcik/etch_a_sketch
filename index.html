@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etch-A-Sketch</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="grid"></div>
+        <div class="buttons">    
+            <button id="resetBtn">↻</button>
+            <div id="sliderDiv">
+                <input id="changeGridSlider" type="range" max="64" min="1" value="16">
+                <div id="sliderValue"> Number of pixels: 16</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let grid_size = 16;
+        let element_size;
+
+        createGrid(grid_size);
+
+        function createGrid(grid_size){
+            element_size = 512 / grid_size;
+            let grid = document.querySelector('.grid');
+            for(let i = 0; i < grid_size**2; i++){
+                let grid_element = document.createElement('div');
+                grid_element.style.width = `${element_size}px`;
+                grid_element.style.height = `${element_size}px`;
+                grid_element.classList.add('grid_element');
+                grid.appendChild(grid_element);
+            };
+        }
+
+        const reset = document.querySelector('#resetBtn');
+        reset.addEventListener('click', () => {
+            grid_elements.forEach(gridElement => {
+                if(gridElement.classList.contains('active')){
+                gridElement.classList.remove('active');
+                }
+            })
+        });
+
+        let slider = document.querySelector('#changeGridSlider');
+        let sliderValue = document.querySelector('#sliderValue');
+        slider.oninput = () => {
+            sliderValue.textContent = `Number of pixels: ${slider.value}`;
+            let grid = document.querySelector('.grid');
+            removeGrid(grid);
+            createGrid(slider.value);
+        };
+
+        function removeGrid(grid) {
+            while(grid.firstChild){
+                grid.removeChild(grid.firstChild);
+            }
+        }
+        let grid_elements = document.querySelectorAll('.grid_element');
+        grid_elements.forEach(gridElement => {
+            gridElement.addEventListener('mouseover', (gridElement) =>{
+                gridElement.target.classList.add('active');
+            })
+        });
+    </script>
+</body>
+</html>
