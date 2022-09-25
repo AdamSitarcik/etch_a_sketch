@@ -4,6 +4,10 @@ body {
     align-content: center;
 }
 
+h1 {
+    font-size: 25px;
+}
+
 .container {
     display: flex;
     flex-direction: column;

@@ -8,12 +8,13 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <h1>Etch-A-Sketch</h1>
     <div class="container">
         <div class="grid"></div>
         <div class="buttons">    
             <button id="resetBtn">↻</button>
             <div id="sliderDiv">
-                <input id="changeGridSlider" type="range" max="64" min="1" value="16">
+                <input id="changeGridSlider" type="range" max="64" min="1" >
                 <div id="sliderValue"> Number of pixels: 16</div>
             </div>
         </div>
@@ -23,21 +24,38 @@
         let grid_size = 16;
         let element_size;
 
+        let slider = document.querySelector('#changeGridSlider');
+        let sliderValue = document.querySelector('#sliderValue');
+        let grid = document.querySelector('.grid');
+        const reset = document.querySelector('#resetBtn');
+        let grid_elements;
+
         createGrid(grid_size);
 
+        grid_elements = document.querySelectorAll('.grid_element'); 
+
+        function getElementSize(grid_size){
+            return 512 / grid_size;
+        }
+
+        function setSliderValue(grid_size) {
+            slider.setAttribute('value', grid_size);
+            sliderValue.textContent = `Number of pixels: ${grid_size}*${grid_size}`;
+        }
+
         function createGrid(grid_size){
-            element_size = 512 / grid_size;
-            let grid = document.querySelector('.grid');
+            grid = document.querySelector('.grid');
+            element_size = getElementSize(grid_size);
             for(let i = 0; i < grid_size**2; i++){
                 let grid_element = document.createElement('div');
                 grid_element.style.width = `${element_size}px`;
                 grid_element.style.height = `${element_size}px`;
                 grid_element.classList.add('grid_element');
                 grid.appendChild(grid_element);
-            };
+            }
         }
+        console.log(grid_elements);
 
-        const reset = document.querySelector('#resetBtn');
         reset.addEventListener('click', () => {
             grid_elements.forEach(gridElement => {
                 if(gridElement.classList.contains('active')){
@@ -46,13 +64,12 @@
             })
         });
 
-        let slider = document.querySelector('#changeGridSlider');
-        let sliderValue = document.querySelector('#sliderValue');
         slider.oninput = () => {
             sliderValue.textContent = `Number of pixels: ${slider.value}`;
-            let grid = document.querySelector('.grid');
+            // let grid = document.querySelector('.grid');
+            grid_size = slider.value;
             removeGrid(grid);
-            createGrid(slider.value);
+            createGrid(grid_size);
         };
 
         function removeGrid(grid) {
@@ -60,12 +77,24 @@
                 grid.removeChild(grid.firstChild);
             }
         }
-        let grid_elements = document.querySelectorAll('.grid_element');
-        grid_elements.forEach(gridElement => {
-            gridElement.addEventListener('mouseover', (gridElement) =>{
-                gridElement.target.classList.add('active');
-            })
-        });
+        
+        (grid) => {
+            grid_elements = document.querySelectorAll('.grid_element');
+            grid_elements.forEach(gridElement => {
+                gridElement.addEventListener('mouseover', (gridElement) => {
+                    gridElement.target.classList.add('active');
+                });
+            });
+        }
+        
+        // grid_elements.forEach(gridElement => {
+        //     gridElement.addEventListener('mouseover', (gridElement) => {
+        //         gridElement.target.classList.add('active');
+        //         console.log('ahoj');
+        //     }
+        //     )
+        // });
+
     </script>
 </body>
 </html>
